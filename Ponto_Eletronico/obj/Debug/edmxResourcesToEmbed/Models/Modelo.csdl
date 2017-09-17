@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Ponto_Eletronico_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="Ponto_Eletronico_Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cargo" EntityType="Ponto_Eletronico_Model.Cargo" />
+    <EntitySet Name="Funcionario" EntityType="Ponto_Eletronico_Model.Funcionario" />
+    <EntitySet Name="Funcionario_Cargo" EntityType="Ponto_Eletronico_Model.Funcionario_Cargo" />
+    <EntitySet Name="Ponto" EntityType="Ponto_Eletronico_Model.Ponto" />
+    <AssociationSet Name="FK_Funcionario_Cargo_Cargo" Association="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Cargo">
+      <End Role="Cargo" EntitySet="Cargo" />
+      <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Funcionario_Cargo_Funcionario" Association="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Funcionario">
+      <End Role="Funcionario" EntitySet="Funcionario" />
+      <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ponto_Funcionario" Association="Ponto_Eletronico_Model.FK_Ponto_Funcionario">
+      <End Role="Funcionario" EntitySet="Funcionario" />
+      <End Role="Ponto" EntitySet="Ponto" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cargo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Descricao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Funcionario_Cargo" Relationship="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Cargo" FromRole="Cargo" ToRole="Funcionario_Cargo" />
+  </EntityType>
+  <EntityType Name="Funcionario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cpf" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="usuario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="senha" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Funcionario_Cargo" Relationship="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Funcionario" FromRole="Funcionario" ToRole="Funcionario_Cargo" />
+    <NavigationProperty Name="Ponto" Relationship="Ponto_Eletronico_Model.FK_Ponto_Funcionario" FromRole="Funcionario" ToRole="Ponto" />
+  </EntityType>
+  <EntityType Name="Funcionario_Cargo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="id_Funcionario" Type="Int32" Nullable="false" />
+    <Property Name="id_Cargo" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Cargo" Relationship="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Cargo" FromRole="Funcionario_Cargo" ToRole="Cargo" />
+    <NavigationProperty Name="Funcionario" Relationship="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Funcionario" FromRole="Funcionario_Cargo" ToRole="Funcionario" />
+  </EntityType>
+  <EntityType Name="Ponto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="id_Funcionario" Type="Int32" Nullable="false" />
+    <Property Name="data_hora_entrada" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="data_hora_saida" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Funcionario" Relationship="Ponto_Eletronico_Model.FK_Ponto_Funcionario" FromRole="Ponto" ToRole="Funcionario" />
+  </EntityType>
+  <Association Name="FK_Funcionario_Cargo_Cargo">
+    <End Type="Ponto_Eletronico_Model.Cargo" Role="Cargo" Multiplicity="1" />
+    <End Type="Ponto_Eletronico_Model.Funcionario_Cargo" Role="Funcionario_Cargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cargo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Funcionario_Cargo">
+        <PropertyRef Name="id_Cargo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Funcionario_Cargo_Funcionario">
+    <End Type="Ponto_Eletronico_Model.Funcionario" Role="Funcionario" Multiplicity="1" />
+    <End Type="Ponto_Eletronico_Model.Funcionario_Cargo" Role="Funcionario_Cargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Funcionario_Cargo">
+        <PropertyRef Name="id_Funcionario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ponto_Funcionario">
+    <End Type="Ponto_Eletronico_Model.Funcionario" Role="Funcionario" Multiplicity="1" />
+    <End Type="Ponto_Eletronico_Model.Ponto" Role="Ponto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ponto">
+        <PropertyRef Name="id_Funcionario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

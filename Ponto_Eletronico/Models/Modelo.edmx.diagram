@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b6022b9bb16544b9b26afaa95e8a4130" Name="Diagram1">
+        <EntityTypeShape EntityType="Ponto_Eletronico_Model.Cargo" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Ponto_Eletronico_Model.Funcionario" Width="1.5" PointX="0.75" PointY="3.25" />
+        <EntityTypeShape EntityType="Ponto_Eletronico_Model.Funcionario_Cargo" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="Ponto_Eletronico_Model.Ponto" Width="1.5" PointX="3" PointY="6.25" />
+        <AssociationConnector Association="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Cargo" />
+        <AssociationConnector Association="Ponto_Eletronico_Model.FK_Funcionario_Cargo_Funcionario" />
+        <AssociationConnector Association="Ponto_Eletronico_Model.FK_Ponto_Funcionario" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

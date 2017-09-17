@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Ponto_EletronicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Funcionario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" />
+          <Property Name="cpf" Type="varchar" MaxLength="14" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="usuario" Type="varchar" MaxLength="20" />
+          <Property Name="senha" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Funcionario_Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_Funcionario" Type="int" Nullable="false" />
+          <Property Name="id_Cargo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ponto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_Funcionario" Type="int" Nullable="false" />
+          <Property Name="data_hora_entrada" Type="datetime" Nullable="false" />
+          <Property Name="data_hora_saida" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Funcionario_Cargo_Cargo">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="id_Cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Funcionario_Cargo_Funcionario">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="id_Funcionario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ponto_Funcionario">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Ponto" Type="Self.Ponto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ponto">
+              <PropertyRef Name="id_Funcionario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Ponto_EletronicoModelStoreContainer">
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Funcionario" EntityType="Self.Funcionario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Funcionario_Cargo" EntityType="Self.Funcionario_Cargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ponto" EntityType="Self.Ponto" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Funcionario_Cargo_Cargo" Association="Self.FK_Funcionario_Cargo_Cargo">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Funcionario_Cargo_Funcionario" Association="Self.FK_Funcionario_Cargo_Funcionario">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ponto_Funcionario" Association="Self.FK_Ponto_Funcionario">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Ponto" EntitySet="Ponto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ponto_EletronicoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descricao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Funcionario_Cargo" Relationship="Self.FK_Funcionario_Cargo_Cargo" FromRole="Cargo" ToRole="Funcionario_Cargo" />
+        </EntityType>
+        <EntityType Name="Funcionario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="cpf" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="usuario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="senha" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Funcionario_Cargo" Relationship="Self.FK_Funcionario_Cargo_Funcionario" FromRole="Funcionario" ToRole="Funcionario_Cargo" />
+          <NavigationProperty Name="Ponto" Relationship="Self.FK_Ponto_Funcionario" FromRole="Funcionario" ToRole="Ponto" />
+        </EntityType>
+        <EntityType Name="Funcionario_Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_Funcionario" Type="Int32" Nullable="false" />
+          <Property Name="id_Cargo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cargo" Relationship="Self.FK_Funcionario_Cargo_Cargo" FromRole="Funcionario_Cargo" ToRole="Cargo" />
+          <NavigationProperty Name="Funcionario" Relationship="Self.FK_Funcionario_Cargo_Funcionario" FromRole="Funcionario_Cargo" ToRole="Funcionario" />
+        </EntityType>
+        <EntityType Name="Ponto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_Funcionario" Type="Int32" Nullable="false" />
+          <Property Name="data_hora_entrada" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="data_hora_saida" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Funcionario" Relationship="Self.FK_Ponto_Funcionario" FromRole="Ponto" ToRole="Funcionario" />
+        </EntityType>
+        <Association Name="FK_Funcionario_Cargo_Cargo">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="id_Cargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Funcionario_Cargo_Funcionario">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Funcionario_Cargo">
+              <PropertyRef Name="id_Funcionario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ponto_Funcionario">
+          <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+          <End Role="Ponto" Type="Self.Ponto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Funcionario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ponto">
+              <PropertyRef Name="id_Funcionario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Ponto_EletronicoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" />
+          <EntitySet Name="Funcionario" EntityType="Self.Funcionario" />
+          <EntitySet Name="Funcionario_Cargo" EntityType="Self.Funcionario_Cargo" />
+          <EntitySet Name="Ponto" EntityType="Self.Ponto" />
+          <AssociationSet Name="FK_Funcionario_Cargo_Cargo" Association="Self.FK_Funcionario_Cargo_Cargo">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Funcionario_Cargo_Funcionario" Association="Self.FK_Funcionario_Cargo_Funcionario">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ponto_Funcionario" Association="Self.FK_Ponto_Funcionario">
+            <End Role="Funcionario" EntitySet="Funcionario" />
+            <End Role="Ponto" EntitySet="Ponto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Ponto_EletronicoModelStoreContainer" CdmEntityContainer="Ponto_EletronicoEntities">
+          <EntitySetMapping Name="Cargo">
+            <EntityTypeMapping TypeName="Ponto_EletronicoModel.Cargo">
+              <MappingFragment StoreEntitySet="Cargo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Funcionario">
+            <EntityTypeMapping TypeName="Ponto_EletronicoModel.Funcionario">
+              <MappingFragment StoreEntitySet="Funcionario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="cpf" ColumnName="cpf" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="senha" ColumnName="senha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Funcionario_Cargo">
+            <EntityTypeMapping TypeName="Ponto_EletronicoModel.Funcionario_Cargo">
+              <MappingFragment StoreEntitySet="Funcionario_Cargo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="id_Funcionario" ColumnName="id_Funcionario" />
+                <ScalarProperty Name="id_Cargo" ColumnName="id_Cargo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ponto">
+            <EntityTypeMapping TypeName="Ponto_EletronicoModel.Ponto">
+              <MappingFragment StoreEntitySet="Ponto">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="id_Funcionario" ColumnName="id_Funcionario" />
+                <ScalarProperty Name="data_hora_entrada" ColumnName="data_hora_entrada" />
+                <ScalarProperty Name="data_hora_saida" ColumnName="data_hora_saida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,51 @@
+﻿@model Ponto_Eletronico.Models.Funcionario
+
+@{
+    ViewBag.Title = "Menu_Admin";
+}
+
+<h2>Menu Admin</h2>
+
+<div class="jumbotron">
+    <div class="row">
+        Bem Vindo,
+        @{
+            @Html.DisplayFor(model => model.nome)
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Funcionários", "Index", "Funcionarios", new { area = "" }, null)
+        </div>
+        <div class="col-md-6">
+            @Html.ActionLink("Consultar Pontos", "Index", "Pontos", new { area = "" }, null)
+        </div>
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                @Html.TextBox("data_entrada", DateTime.Now, new { @type = "DateTime" })
+            </div>
+            <div class="row">
+                @Html.ActionLink("Ponto Entrada", "Index", "Entrada", new { area = "" }, null)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                @Html.TextBox("data_saida", DateTime.Now, new { @type = "DateTime" })
+            </div>
+            <div class="row">
+                @Html.ActionLink("Ponto Saída", "Index", "Saida", new { area = "" }, null)
+            </div>
+        </div>
+    </div>
+
+    <br/><br />
+
+    <div class="row">
+        @Html.ActionLink("Sair", "Login", "Funcionarios")
+    </div>
+</div>

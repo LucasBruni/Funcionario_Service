@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Menu_Comum";
+}
+
+<h2>Menu Comum</h2>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                @Html.TextBox("data_entrada", DateTime.Now, new { @type = "DateTime" })
+            </div>
+            <div class="row">
+                @Html.ActionLink("Ponto Entrada", "Index", "Entrada", new { area = "" }, null)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                @Html.TextBox("data_saida", DateTime.Now, new { @type = "DateTime" })
+            </div>
+            <div class="row">
+                @Html.ActionLink("Ponto Saída", "Index", "Saida", new { area = "" }, null)
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Ponto_EletronicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cargo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descricao" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Funcionario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nome" Type="varchar" MaxLength="50" />
+    <Property Name="cpf" Type="varchar" MaxLength="14" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="usuario" Type="varchar" MaxLength="20" />
+    <Property Name="senha" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Funcionario_Cargo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_Funcionario" Type="int" Nullable="false" />
+    <Property Name="id_Cargo" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ponto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_Funcionario" Type="int" Nullable="false" />
+    <Property Name="data_hora_entrada" Type="datetime" Nullable="false" />
+    <Property Name="data_hora_saida" Type="datetime" />
+  </EntityType>
+  <Association Name="FK_Funcionario_Cargo_Cargo">
+    <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+    <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cargo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Funcionario_Cargo">
+        <PropertyRef Name="id_Cargo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Funcionario_Cargo_Funcionario">
+    <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+    <End Role="Funcionario_Cargo" Type="Self.Funcionario_Cargo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Funcionario_Cargo">
+        <PropertyRef Name="id_Funcionario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ponto_Funcionario">
+    <End Role="Funcionario" Type="Self.Funcionario" Multiplicity="1" />
+    <End Role="Ponto" Type="Self.Ponto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ponto">
+        <PropertyRef Name="id_Funcionario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Ponto_EletronicoModelStoreContainer">
+    <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Funcionario" EntityType="Self.Funcionario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Funcionario_Cargo" EntityType="Self.Funcionario_Cargo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ponto" EntityType="Self.Ponto" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Funcionario_Cargo_Cargo" Association="Self.FK_Funcionario_Cargo_Cargo">
+      <End Role="Cargo" EntitySet="Cargo" />
+      <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Funcionario_Cargo_Funcionario" Association="Self.FK_Funcionario_Cargo_Funcionario">
+      <End Role="Funcionario" EntitySet="Funcionario" />
+      <End Role="Funcionario_Cargo" EntitySet="Funcionario_Cargo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ponto_Funcionario" Association="Self.FK_Ponto_Funcionario">
+      <End Role="Funcionario" EntitySet="Funcionario" />
+      <End Role="Ponto" EntitySet="Ponto" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
