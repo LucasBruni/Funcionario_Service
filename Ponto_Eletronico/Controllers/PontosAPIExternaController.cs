@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using System.Web.Http.Description;
 using Ponto_Eletronico.Models;
 using System.Collections.Generic;
 using System.Web.Http.Results;
@@ -32,8 +31,9 @@ namespace Ponto_Eletronico.Controllers
             return Ponto;
         }
 
+        // Método para o administrador alterar um registro.
+        // TODO: Adicionar verificação para quando falhar retornar false.
         public bool PutPonto(int id, int id_Funcionario, DateTime data_hora_entrada, DateTime data_hora_saida) {
-            // TODO: Adicionar verificação para quando falhar retornar false.
             Ponto Ponto = new Ponto();
             Ponto.Id = id;
             Ponto.id_Funcionario = id_Funcionario;
@@ -50,9 +50,31 @@ namespace Ponto_Eletronico.Controllers
             return true;
         }
 
+        // Método para alterar um registro e adicionar o ponto de saída.
+        // TODO: Adicionar verificação para quando falhar retornar false.
+        public bool PutPontoSaida(int id_Funcionario, DateTime? data_hora_saida = null)
+        {
+            // Caso não envie a hora de saida, busca a hora
+            if (data_hora_saida == null)
+            {
+                data_hora_saida = DateTime.Now;
+            }
+            try
+            {
+                apiInterna.PutPontoSaida(id_Funcionario , data_hora_saida);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Método para adicionar um registro com entrada e saída.
+        // TODO: Adicionar verificação para quando falhar retornar false.
         public bool PostPonto(int id_Funcionario, DateTime data_hora_entrada, DateTime data_hora_saida)
         {
-            // TODO: Adicionar verificação para quando falhar retornar false.
             Ponto Ponto = new Ponto();
             Ponto.id_Funcionario = id_Funcionario;
             Ponto.data_hora_entrada = data_hora_entrada;
@@ -60,6 +82,27 @@ namespace Ponto_Eletronico.Controllers
             try
             {
                 apiInterna.PostPonto(Ponto);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        // Método para registrar um ponto de entrada.
+        // TODO: Adicionar verificação para quando falhar retornar false.
+        public bool PostPontoEntrada(int id_Funcionario, DateTime? data_hora_entrada = null)
+        {
+            // Caso não envie a hora de entrada, busca a hora
+            if (data_hora_entrada == null)
+            {
+                data_hora_entrada = DateTime.Now;
+            }
+            try
+            {
+                apiInterna.PostPontoEntrada(id_Funcionario,data_hora_entrada);
             }
             catch
             {

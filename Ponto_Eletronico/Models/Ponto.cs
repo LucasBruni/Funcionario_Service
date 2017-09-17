@@ -20,14 +20,6 @@ namespace Ponto_Eletronico.Models
 
         public Ponto() { }
 
-        //public Ponto(int id, int id_Funcionario, DateTime data_hora_entrada, DateTime data_hora_saida)
-        //{
-        //    this.Id = id;
-        //    this.id_Funcionario = id_Funcionario;
-        //    this.data_hora_entrada = data_hora_entrada;
-        //    this.data_hora_saida = data_hora_saida;
-        //}
-
         [Key]
         public int Id { get; set; }
 

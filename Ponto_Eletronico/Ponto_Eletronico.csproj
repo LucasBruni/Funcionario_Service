@@ -181,6 +181,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CargosAPIInternaController.cs" />
+    <Compile Include="Controllers\CargosAPIExternaController.cs" />
     <Compile Include="Controllers\PontosAPIExternaController.cs" />
     <Compile Include="Controllers\FuncionariosAPIExternaController.cs" />
     <Compile Include="Controllers\FuncionariosAPIInternaController.cs" />

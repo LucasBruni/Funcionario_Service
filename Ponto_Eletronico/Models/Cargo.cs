@@ -20,6 +20,18 @@ namespace Ponto_Eletronico.Models
         {
             this.Funcionario_Cargo = new HashSet<Funcionario_Cargo>();
         }
+
+        public Cargo(int id, string descricao)
+        {
+            this.Id = id;
+            this.Descricao = descricao;
+        }
+
+        public Cargo(string descricao)
+        {
+            this.Descricao = descricao;
+        }
+
         [Key]
         public int Id { get; set; }
 

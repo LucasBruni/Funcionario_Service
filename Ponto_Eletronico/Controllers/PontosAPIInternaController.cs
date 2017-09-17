@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Ponto_Eletronico.Models;
@@ -42,6 +40,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // PUT: api/PontosAPIInterna/5
+        // TODO: Verificar forma de retornar false para camada externa.
         [ResponseType(typeof(void))]
         public IHttpActionResult PutPonto(int id, Ponto ponto)
         {
@@ -76,7 +75,41 @@ namespace Ponto_Eletronico.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // Método para efetuar o lançamento apenas de saída.
+        // TODO: Verificar forma de retornar false para camada externa.
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutPontoSaida(int id_Funcionario, DateTime? data_hora_saida)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }                
+
+            try
+            {
+                // Verifica se é o mesmo funcionário, se existe uma entrada sem saída e se a saída é após a entrada.
+                if (db.Ponto.Where(p => p.id_Funcionario == id_Funcionario && p.data_hora_saida == null && p.data_hora_entrada < data_hora_saida).Count() > 0)
+                {
+                    Ponto ponto = new Ponto();
+                    // Busca o registro para adicionar a saída.
+                    ponto = db.Ponto.Where(p => p.id_Funcionario == id_Funcionario && p.data_hora_saida == null && p.data_hora_entrada < data_hora_saida).FirstOrDefault();
+                    ponto.data_hora_saida = (DateTime) data_hora_saida;
+                    db.Entry(ponto).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return StatusCode(HttpStatusCode.NoContent);
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return BadRequest();
+        }
+
         // POST: api/PontosAPIInterna
+        // TODO: Verificar forma de retornar false para camada externa.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult PostPonto(Ponto ponto)
         {
@@ -91,7 +124,31 @@ namespace Ponto_Eletronico.Controllers
             return CreatedAtRoute("DefaultApi", new { id = ponto.Id }, ponto);
         }
 
+        // Método para registar apenas a entrada.
+        // TODO: Verificar forma de retornar false para camada externa.
+        [ResponseType(typeof(Ponto))]
+        public IHttpActionResult PostPontoEntrada(int id_Funcionario, DateTime? data_hora_entrada)
+        {
+            Ponto ponto = new Ponto();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            // Verifica se é o mesmo funcionário e que não exista uma saída pendente.
+            if (db.Ponto.Where(p => p.id_Funcionario == id_Funcionario && p.data_hora_saida == null).Count() == 0)
+            {
+                ponto.id_Funcionario = id_Funcionario;
+                ponto.data_hora_entrada = (DateTime) data_hora_entrada;
+
+                db.Ponto.Add(ponto);
+                db.SaveChanges();
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = ponto.Id }, ponto);
+        }
+
         // DELETE: api/PontosAPIInterna/5
+        // TODO: Verificar forma de retornar false para camada externa.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult DeletePonto(int id)
         {

@@ -32,13 +32,13 @@ namespace Ponto_Eletronico.Controllers
             return funcionario;
         }
 
+        // TODO: melhorar verificações e enviar o motivo de não logar. Ex: Senha inválida. Ex2: Usuário não existe.
         public Funcionario GetLogin(string user, string senha) {
-            // TODO: melhorar verificações e enviar o motivo de não logar. Ex: Senha inválida. Ex2: Usuário não existe.
             return apiInterna.GetLogin(user, senha);
         }
 
+        // TODO: Adicionar verificação para quando falhar retornar false.
         public bool PutFuncionario(int id, string nome, string cpf, string email, string usuario, string senha) {
-            // TODO: Adicionar verificação para quando falhar retornar false.
             Funcionario funcionario = new Funcionario(id,nome,cpf,email,usuario,senha);
             try {
                 apiInterna.PutFuncionario(id, funcionario);
@@ -51,9 +51,9 @@ namespace Ponto_Eletronico.Controllers
             return true;
         }
 
+        // TODO: Adicionar verificação para quando falhar retornar false.
         public bool PostFuncionario(string nome, string cpf, string email, string usuario, string senha)
         {
-            // TODO: Adicionar verificação para quando falhar retornar false.
             Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
             try
             {
