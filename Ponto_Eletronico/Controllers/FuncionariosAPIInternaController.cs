@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Ponto_Eletronico.Models;
+using System.Net.Http;
 
 namespace Ponto_Eletronico.Controllers
 {
@@ -29,31 +30,54 @@ namespace Ponto_Eletronico.Controllers
         public IHttpActionResult GetFuncionario(int id)
         {
             Funcionario funcionario = db.Funcionario.Find(id);
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
             if (funcionario == null)
             {
-                return NotFound();
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário não encontrado"));
             }
-
-            return Ok(funcionario);
+            return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
-        public Funcionario GetLogin(string user, string senha)
+        public IHttpActionResult GetLogin(string user, string senha)
         {
-            return db.Funcionario.Where(i => i.usuario == user && i.senha == senha).FirstOrDefault();
+            Funcionario funcionario = new Funcionario();
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
+            if (db.Funcionario.Where(i => i.usuario == user).Count() > 0)
+            {
+                if (db.Funcionario.Where(i => i.usuario == user && i.senha == senha).Count() > 0)
+                {
+                    funcionario = db.Funcionario.Where(i => i.usuario == user && i.senha == senha).FirstOrDefault();
+                }
+                else
+                {
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Senha incorreta."));
+                }
+            }
+            else {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Usuário incorreto"));
+            }
+            return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
         // PUT: api/FuncionariosAPIInterna/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutFuncionario(int id, Funcionario funcionario)
         {
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Modelo inválido."));
             }
 
             if (id != funcionario.Id)
             {
-                return BadRequest();
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "O id enviado é diferente do id do Funcionário."));
             }
 
             db.Entry(funcionario).State = EntityState.Modified;
@@ -66,30 +90,33 @@ namespace Ponto_Eletronico.Controllers
             {
                 if (!FuncionarioExists(id))
                 {
-                    return NotFound();
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário não encontrado."));
                 }
                 else
                 {
-                    throw;
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Erro ao salvar o Funcionário."));
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.OK, "Funcionário alterado com sucesso."));
         }
 
         // POST: api/FuncionariosAPIInterna
         [ResponseType(typeof(Funcionario))]
         public IHttpActionResult PostFuncionario(Funcionario funcionario)
         {
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Modelo inválido."));
             }
 
             db.Funcionario.Add(funcionario);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = funcionario.Id }, funcionario);
+            return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
         // DELETE: api/FuncionariosAPIInterna/5
@@ -97,15 +124,18 @@ namespace Ponto_Eletronico.Controllers
         public IHttpActionResult DeleteFuncionario(int id)
         {
             Funcionario funcionario = db.Funcionario.Find(id);
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
             if (funcionario == null)
             {
-                return NotFound();
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário não encontrado."));
             }
 
             db.Funcionario.Remove(funcionario);
             db.SaveChanges();
 
-            return Ok(funcionario);
+            return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
         protected override void Dispose(bool disposing)

@@ -10,71 +10,157 @@ namespace Ponto_Eletronico.Controllers
     public class FuncionariosAPIExternaController : ApiController
     {
         private FuncionariosAPIInternaController apiInterna = new FuncionariosAPIInternaController();
+        private Funcionario_CargoAPIExternaController func_cargoExterna = new Funcionario_CargoAPIExternaController();
 
         public IEnumerable<Funcionario> GetAllFuncionarios()
         {
             return apiInterna.GetFuncionario();
         }
 
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
         public Funcionario GetFuncionarios(int id)
         {
-            Funcionario funcionario = new Funcionario();
+            Funcionario funcionario;
             IHttpActionResult result;
-            result = apiInterna.GetFuncionario(id);
-
+            
             try
             {
-                funcionario = ((OkNegotiatedContentResult<Funcionario>)result).Content;
+                result = apiInterna.GetFuncionario(id);
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    funcionario = (Funcionario) ((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
+                    return funcionario;
+                }
+                else {
+                    return null;
+                }
             }
             catch(Exception e) {
                 return null;
             }
-            return funcionario;
         }
 
-        // TODO: melhorar verificações e enviar o motivo de não logar. Ex: Senha inválida. Ex2: Usuário não existe.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
+        [HttpGet]
         public Funcionario GetLogin(string user, string senha) {
-            return apiInterna.GetLogin(user, senha);
+            Funcionario funcionario;
+            IHttpActionResult result;
+            
+            try
+            {
+                result = apiInterna.GetLogin(user, senha);
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    funcionario = (Funcionario)((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
+                    return funcionario;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
-        // TODO: Adicionar verificação para quando falhar retornar false.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
+        [HttpPut]
         public bool PutFuncionario(int id, string nome, string cpf, string email, string usuario, string senha) {
-            Funcionario funcionario = new Funcionario(id,nome,cpf,email,usuario,senha);
-            try {
-                apiInterna.PutFuncionario(id, funcionario);
+            Funcionario funcionario = new Funcionario(id, nome, cpf, email, usuario, senha);
+            IHttpActionResult result;
+
+            try
+            {
+                result = apiInterna.PutFuncionario(id, funcionario);
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
-            
-            return true;
         }
 
-        // TODO: Adicionar verificação para quando falhar retornar false.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
         public bool PostFuncionario(string nome, string cpf, string email, string usuario, string senha)
         {
             Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
+            IHttpActionResult result;
+            
             try
             {
-                apiInterna.PostFuncionario(funcionario);
+                result = apiInterna.PostFuncionario(funcionario);
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch
             {
                 return false;
             }
-
-            return true;
         }
 
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
+        // TODO: Receber lista de cargos por parâmetro.
+        // TODO: Apagar os cargos e recriar.
+        //public bool PostFuncionario(string nome, string cpf, string email, string usuario, string senha, List<int> listaCargos_id)
+        //{
+        //    Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
+        //    Funcionario id_Funcionario = new Funcionario();
+        //    IHttpActionResult result;
+        //    try
+        //    {
+        //        result = apiInterna.PostFuncionario(funcionario);
+        //        if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+        //        {
+        //            id_Funcionario = (Funcionario)((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
+        //            foreach (int cargo_id in listaCargos_id)
+        //            {
+        //                func_cargoExterna.PostFuncionario_Cargo(id_Funcionario.Id, cargo_id);
+        //            }
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
+
         public bool DeleteFuncionario(int id) {
+            IHttpActionResult result;
+            
             try {
-                apiInterna.DeleteFuncionario(id);
+                result = apiInterna.DeleteFuncionario(id);
+
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             } catch {
                 return false;
             }
-            
-            return true;
         }
 
     }

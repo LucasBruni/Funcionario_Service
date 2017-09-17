@@ -15,6 +15,9 @@ namespace Ponto_Eletronico.Models
     
     public partial class Funcionario_Cargo
     {
+
+        public Funcionario_Cargo() { }
+
         public int Id { get; set; }
 
         [Display(Name = "Funcionário")]

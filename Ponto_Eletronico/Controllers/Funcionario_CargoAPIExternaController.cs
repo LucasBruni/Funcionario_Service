@@ -6,28 +6,27 @@ using System;
 
 namespace Ponto_Eletronico.Controllers
 {
-    public class CargosAPIExternaController : ApiController
+    public class Funcionario_CargoAPIExternaController : ApiController
     {
-        private CargosAPIInternaController apiInterna = new CargosAPIInternaController();
+        private Funcionario_CargoAPIInternaController apiInterna = new Funcionario_CargoAPIInternaController();
 
-        public IEnumerable<Cargo> GetAllCargos()
+        public IEnumerable<Funcionario_Cargo> GetAllFuncionario_Cargos()
         {
-            return apiInterna.GetCargo();
+            return apiInterna.GetFuncionario_Cargo();
         }
 
-        // TODO: Verificar se deveria retorna mensagem de erro ou null.
-        public Cargo GetCargos(int id)
+        public Funcionario_Cargo GetFuncionario_Cargos(int id)
         {
-            Cargo Cargo = new Cargo();
+            Funcionario_Cargo Funcionario_Cargo = new Funcionario_Cargo();
             IHttpActionResult result;
 
             try
             {
-                result = apiInterna.GetCargo(id);
+                result = apiInterna.GetFuncionario_Cargo(id);
                 if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
                 {
-                    Cargo = (Cargo)((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
-                    return Cargo;
+                    Funcionario_Cargo = (Funcionario_Cargo)((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
+                    return Funcionario_Cargo;
                 }
                 else
                 {
@@ -40,15 +39,16 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
-        // TODO: Verificar se deveria retorna mensagem de erro ou null.
-        [HttpPut]
-        public bool PutCargo(int id, [FromBody]string descricao) {
+        // TODO: Adicionar verificação para quando falhar retornar false.
+        public bool PutFuncionario_Cargo(int id, int id_Funcionario, int id_Cargo) {
             IHttpActionResult result;
-            Cargo Cargo = new Cargo(id, descricao);
-
+            Funcionario_Cargo Funcionario_Cargo = new Funcionario_Cargo();
+            Funcionario_Cargo.Id = id;
+            Funcionario_Cargo.id_Funcionario = id_Funcionario;
+            Funcionario_Cargo.id_Cargo = id_Cargo;
             try
             {
-                result = apiInterna.PutCargo(id, Cargo);
+                result = apiInterna.PutFuncionario_Cargo(id, Funcionario_Cargo);
                 if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
                 {
                     return true;
@@ -64,16 +64,17 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
-        // TODO: Verificar se deveria retorna mensagem de erro ou null.
-        [HttpPost]
-        public bool PostCargo([FromBody]string descricao)
+        // TODO: Adicionar verificação para quando falhar retornar false.
+        public bool PostFuncionario_Cargo(int id_Funcionario, int id_Cargo)
         {
             IHttpActionResult result;
-            Cargo Cargo = new Cargo(descricao);
+            Funcionario_Cargo Funcionario_Cargo = new Funcionario_Cargo();
+            Funcionario_Cargo.id_Funcionario = id_Funcionario;
+            Funcionario_Cargo.id_Cargo = id_Cargo;
 
             try
             {
-                result = apiInterna.PostCargo(Cargo);
+                result = apiInterna.PostFuncionario_Cargo(Funcionario_Cargo);
                 if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
                 {
                     return true;
@@ -89,13 +90,12 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
-        // TODO: Verificar se deveria retorna mensagem de erro ou null.
-        public bool DeleteCargo(int id) {
+        public bool DeleteFuncionario_Cargo(int id) {
             IHttpActionResult result;
 
             try
             {
-                result = apiInterna.DeleteCargo(id);
+                result = apiInterna.DeleteFuncionario_Cargo(id);
                 if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
                 {
                     return true;
