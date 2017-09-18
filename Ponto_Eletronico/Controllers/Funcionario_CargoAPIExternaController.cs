@@ -11,11 +11,13 @@ namespace Ponto_Eletronico.Controllers
         private Funcionario_CargoAPIInternaController apiInterna = new Funcionario_CargoAPIInternaController();
         private CargosAPIExternaController CargosApiExterna = new CargosAPIExternaController();
 
+        // Método retorna todos os Funcionario_Cargo.
         public IEnumerable<Funcionario_Cargo> GetAllFuncionario_Cargos()
         {
             return apiInterna.GetFuncionario_Cargo();
         }
 
+        // Método retorna um Funcionario_Cargo pelo id.
         public Funcionario_Cargo GetFuncionario_Cargos(int id)
         {
             Funcionario_Cargo Funcionario_Cargo = new Funcionario_Cargo();
@@ -41,10 +43,11 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // Retorna todos os Cargos de um funcionário
-        public IEnumerable<Funcionario_Cargo> GetAllCargos(int id_funcionario)
+        public IEnumerable<Funcionario_Cargo> GetTodosCargosDeFuncionario(int id_funcionario)
         {
             IEnumerable<Funcionario_Cargo> lista;
-            lista = apiInterna.GetAllCargos(id_funcionario);
+            lista = apiInterna.GetTodosCargosDeFuncionario(id_funcionario);
+            // Busca e atribui o cargo
             foreach (var item in lista)
             {
                 Cargo cargo;
@@ -54,10 +57,12 @@ namespace Ponto_Eletronico.Controllers
                     item.Cargo = cargo;
                 }
             }
-            return apiInterna.GetAllCargos(id_funcionario);
+            return lista;
+            //return apiInterna.GetTodosCargosDeFuncionario(id_funcionario);
         }
 
-        // TODO: Adicionar verificação para quando falhar retornar false.
+        // Método para alterar um Funcionario_Cargo.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
         public bool PutFuncionario_Cargo(int id, int id_Funcionario, int id_Cargo) {
             IHttpActionResult result;
             Funcionario_Cargo Funcionario_Cargo = new Funcionario_Cargo();
@@ -82,7 +87,8 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
-        // TODO: Adicionar verificação para quando falhar retornar false.
+        // Método para criar um Funcionario_Cargo.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
         public bool PostFuncionario_Cargo(int id_Funcionario, int id_Cargo)
         {
             IHttpActionResult result;
@@ -108,6 +114,8 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
+        // Método para deletar um Funcionario_Cargo.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
         public bool DeleteFuncionario_Cargo(int id) {
             IHttpActionResult result;
 
@@ -129,5 +137,28 @@ namespace Ponto_Eletronico.Controllers
             }
         }
 
+        // Método para deletar um Funcionario_Cargo.
+        // TODO: Verificar se deveria retorna mensagem de erro ou null.
+        public bool DeleteFuncionario_Cargo(int id_funcionario, int id_cargo)
+        {
+            IHttpActionResult result;
+
+            try
+            {
+                result = apiInterna.DeleteFuncionario_Cargo(id_funcionario, id_cargo);
+                if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }

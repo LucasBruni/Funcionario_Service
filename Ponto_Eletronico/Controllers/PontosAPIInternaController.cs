@@ -22,12 +22,20 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // GET: api/PontosAPIInterna
+        // Busca todos os pontos.
         public IQueryable<Ponto> GetPonto()
         {
             return db.Ponto;
         }
 
+        // Busca todos os pontos de um funcionário.
+        public IQueryable<Ponto> GetPontoPorFuncionario(int id_funcionario)
+        {
+            return db.Ponto.Where(f => f.id_Funcionario == id_funcionario);
+        }
+
         // GET: api/PontosAPIInterna/5
+        // Busca ponto pelo ID.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult GetPonto(int id)
         {
@@ -43,7 +51,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // PUT: api/PontosAPIInterna/5
-        // TODO: Verificar forma de retornar false para camada externa.
+        // Altera o ponto.
         [ResponseType(typeof(void))]
         public IHttpActionResult PutPonto(int id, Ponto ponto)
         {
@@ -82,7 +90,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // Método para efetuar o lançamento apenas de saída.
-        // TODO: Verificar forma de retornar false para camada externa.
+        // Altera um ponto que está pendente de saída.
         [ResponseType(typeof(void))]
         public IHttpActionResult PutPontoSaida(int id_Funcionario, DateTime? data_hora_saida)
         {
@@ -119,7 +127,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // POST: api/PontosAPIInterna
-        // TODO: Verificar forma de retornar false para camada externa.
+        // Cria um ponto novo.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult PostPonto(Ponto ponto)
         {
@@ -138,7 +146,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // Método para registar apenas a entrada.
-        // TODO: Verificar forma de retornar false para camada externa.
+        // Cria um ponto somente com entrada.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult PostPontoEntrada(int id_Funcionario, DateTime? data_hora_entrada)
         {
@@ -167,7 +175,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // DELETE: api/PontosAPIInterna/5
-        // TODO: Verificar forma de retornar false para camada externa.
+        // Delete um ponto.
         [ResponseType(typeof(Ponto))]
         public IHttpActionResult DeletePonto(int id)
         {

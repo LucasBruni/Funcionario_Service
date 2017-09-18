@@ -20,12 +20,14 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // GET: api/FuncionariosAPIInterna
+        // Busca todos os funcionários
         public IQueryable<Funcionario> GetFuncionario()
         {
             return db.Funcionario;
         }
 
         // GET: api/FuncionariosAPIInterna/5
+        // Busca um funcionário pela ID.
         [ResponseType(typeof(Funcionario))]
         public IHttpActionResult GetFuncionario(int id)
         {
@@ -40,6 +42,7 @@ namespace Ponto_Eletronico.Controllers
             return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
+        // Método que verifica se o usuário e senha existem na base.
         public IHttpActionResult GetLogin(string user, string senha)
         {
             Funcionario funcionario = new Funcionario();
@@ -63,7 +66,26 @@ namespace Ponto_Eletronico.Controllers
             return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
         }
 
+        // Método buscar um funcionário pelo usuário
+        public IHttpActionResult BuscaFuncionarioPorUsuario(string user)
+        {
+            Funcionario funcionario = new Funcionario();
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+
+            if (db.Funcionario.Where(i => i.usuario == user).Count() > 0)
+            {
+                funcionario = db.Funcionario.Where(i => i.usuario == user).FirstOrDefault();
+            }
+            else
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Usuário não encontrado."));
+            }
+            return ResponseMessage(Request.CreateResponse<Funcionario>(HttpStatusCode.OK, funcionario));
+        }
+
         // PUT: api/FuncionariosAPIInterna/5
+        // Método para alterar um funcionário.
         [ResponseType(typeof(void))]
         public IHttpActionResult PutFuncionario(int id, Funcionario funcionario)
         {
@@ -102,6 +124,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // POST: api/FuncionariosAPIInterna
+        // Método para criar um funcionário.
         [ResponseType(typeof(Funcionario))]
         public IHttpActionResult PostFuncionario(Funcionario funcionario)
         {
@@ -120,6 +143,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // DELETE: api/FuncionariosAPIInterna/5
+        // Método para deletar um funcionário.
         [ResponseType(typeof(Funcionario))]
         public IHttpActionResult DeleteFuncionario(int id)
         {

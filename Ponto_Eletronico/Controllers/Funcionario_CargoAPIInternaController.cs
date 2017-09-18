@@ -20,12 +20,14 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // GET: api/Funcionario_CargoAPIInterna
+        // Método para buscar todos os Funcionarios_cargos.
         public IQueryable<Funcionario_Cargo> GetFuncionario_Cargo()
         {
             return db.Funcionario_Cargo;
         }
 
         // GET: api/Funcionario_CargoAPIInterna/5
+        // Método para retornar um Funcionario_Cargo pelo id.
         [ResponseType(typeof(Funcionario_Cargo))]
         public IHttpActionResult GetFuncionario_Cargo(int id)
         {
@@ -43,12 +45,13 @@ namespace Ponto_Eletronico.Controllers
         // GET: api/Funcionario_CargoAPIInterna/5
         // Retorna todos os Cargos de um funcionário
         [ResponseType(typeof(Funcionario_Cargo))]
-        public IQueryable<Funcionario_Cargo> GetAllCargos(int id_Funcionario)
+        public IQueryable<Funcionario_Cargo> GetTodosCargosDeFuncionario(int id_Funcionario)
         {
             return db.Funcionario_Cargo.Where(f => f.id_Funcionario == id_Funcionario);
         }
 
         // PUT: api/Funcionario_CargoAPIInterna/5
+        // Método para alterar um Funcionario_cargo.
         [ResponseType(typeof(void))]
         public IHttpActionResult PutFuncionario_Cargo(int id, Funcionario_Cargo funcionario_Cargo)
         {
@@ -87,6 +90,7 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // POST: api/Funcionario_CargoAPIInterna
+        // Método para criar um Funcionario_Cargo.
         [ResponseType(typeof(Funcionario_Cargo))]
         public IHttpActionResult PostFuncionario_Cargo(Funcionario_Cargo funcionario_Cargo)
         {
@@ -105,12 +109,32 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // DELETE: api/Funcionario_CargoAPIInterna/5
+        // Método para deletar um Funcionario_Cargo.
         [ResponseType(typeof(Funcionario_Cargo))]
         public IHttpActionResult DeleteFuncionario_Cargo(int id)
         {
             Request = new System.Net.Http.HttpRequestMessage();
             Configuration = new HttpConfiguration();
             Funcionario_Cargo funcionario_Cargo = db.Funcionario_Cargo.Find(id);
+
+            if (funcionario_Cargo == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotFound, "Funcionário_Cargo não encontrado"));
+            }
+
+            db.Funcionario_Cargo.Remove(funcionario_Cargo);
+            db.SaveChanges();
+
+            return ResponseMessage(Request.CreateResponse<Funcionario_Cargo>(HttpStatusCode.OK, funcionario_Cargo));
+        }
+
+        // Método para deletar um Funcionario_Cargo atráves do id_funcionario e id_cargo.
+        [ResponseType(typeof(Funcionario_Cargo))]
+        public IHttpActionResult DeleteFuncionario_Cargo(int id_funcionario, int id_cargo)
+        {
+            Request = new System.Net.Http.HttpRequestMessage();
+            Configuration = new HttpConfiguration();
+            Funcionario_Cargo funcionario_Cargo = db.Funcionario_Cargo.Where(f => f.id_Funcionario == id_funcionario && f.id_Cargo == id_cargo).FirstOrDefault();
 
             if (funcionario_Cargo == null)
             {
