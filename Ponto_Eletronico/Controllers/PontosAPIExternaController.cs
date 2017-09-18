@@ -6,9 +6,17 @@ using System;
 
 namespace Ponto_Eletronico.Controllers
 {
+    public class Relatorio {
+        public int id_funcionario {  get;  set; }
+        public String nome_funcionario { get; set; }
+        public DateTime data { get; set; }
+        public TimeSpan horas_trabalhadas { get; set; }
+    }
+
     public class PontosAPIExternaController : ApiController
     {
         private PontosAPIInternaController apiInterna = new PontosAPIInternaController();
+        private FuncionariosAPIExternaController FuncionarioapiExterna = new FuncionariosAPIExternaController();
 
         public IEnumerable<Ponto> GetAllPontos()
         {
@@ -37,6 +45,41 @@ namespace Ponto_Eletronico.Controllers
             {
                 return null;
             }
+        }
+
+        public IEnumerable<Relatorio> GetRelatorio()
+        {
+            List<Relatorio> lista = new List<Relatorio>();
+            IEnumerable<Ponto> tpontos;
+            tpontos = apiInterna.GetPonto();
+            foreach (var item in tpontos)
+            {
+                Relatorio rel = new Relatorio();
+                rel = lista.Find(x => x.id_funcionario == item.id_Funcionario && x.data == item.data_hora_entrada.Date);
+                if (rel == null)
+                {
+                    rel = new Relatorio();
+                    rel.id_funcionario = item.id_Funcionario;
+                    rel.nome_funcionario = FuncionarioapiExterna.GetFuncionarios(item.id_Funcionario).nome;
+                    rel.data = item.data_hora_entrada.Date;
+                    if (!(item.data_hora_saida == null))
+                    {
+                        DateTime saida = (DateTime) item.data_hora_saida;
+                        rel.horas_trabalhadas = saida.Subtract(item.data_hora_entrada);
+                    }
+                    else
+                    {
+                        // Não tem saída registrada, busca o tempo atual. (Pode causar uma diferença muito grande caso não registre a saída)
+                        //rel.horas_trabalhadas = item.data_hora_entrada.Subtract(DateTime.Now);
+                    }
+                    lista.Add(rel);
+                }
+                else {
+                    DateTime saida = (DateTime)item.data_hora_saida;
+                    rel.horas_trabalhadas = rel.horas_trabalhadas.Add(saida.Subtract(item.data_hora_entrada));
+                }
+            }
+            return lista;
         }
 
         // Método para o administrador alterar um registro.

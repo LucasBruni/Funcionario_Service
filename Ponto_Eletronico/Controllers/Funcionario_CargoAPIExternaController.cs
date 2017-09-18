@@ -9,6 +9,7 @@ namespace Ponto_Eletronico.Controllers
     public class Funcionario_CargoAPIExternaController : ApiController
     {
         private Funcionario_CargoAPIInternaController apiInterna = new Funcionario_CargoAPIInternaController();
+        private CargosAPIExternaController CargosApiExterna = new CargosAPIExternaController();
 
         public IEnumerable<Funcionario_Cargo> GetAllFuncionario_Cargos()
         {
@@ -37,6 +38,23 @@ namespace Ponto_Eletronico.Controllers
             {
                 return null;
             }
+        }
+
+        // Retorna todos os Cargos de um funcionário
+        public IEnumerable<Funcionario_Cargo> GetAllCargos(int id_funcionario)
+        {
+            IEnumerable<Funcionario_Cargo> lista;
+            lista = apiInterna.GetAllCargos(id_funcionario);
+            foreach (var item in lista)
+            {
+                Cargo cargo;
+                cargo = CargosApiExterna.GetCargos(item.id_Cargo);
+                if(cargo != null)
+                {
+                    item.Cargo = cargo;
+                }
+            }
+            return apiInterna.GetAllCargos(id_funcionario);
         }
 
         // TODO: Adicionar verificação para quando falhar retornar false.

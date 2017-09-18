@@ -40,6 +40,14 @@ namespace Ponto_Eletronico.Controllers
             return ResponseMessage(Request.CreateResponse<Funcionario_Cargo>(HttpStatusCode.OK, funcionario_Cargo));
         }
 
+        // GET: api/Funcionario_CargoAPIInterna/5
+        // Retorna todos os Cargos de um funcionário
+        [ResponseType(typeof(Funcionario_Cargo))]
+        public IQueryable<Funcionario_Cargo> GetAllCargos(int id_Funcionario)
+        {
+            return db.Funcionario_Cargo.Where(f => f.id_Funcionario == id_Funcionario);
+        }
+
         // PUT: api/Funcionario_CargoAPIInterna/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutFuncionario_Cargo(int id, Funcionario_Cargo funcionario_Cargo)

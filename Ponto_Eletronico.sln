@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ponto_Eletronico", "Ponto_Eletronico\Ponto_Eletronico.csproj", "{C6042FFE-8893-4BEA-811B-4A0FF528C0FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ponto_Eletronico_Externo", "Ponto_Eletronico_Externo\Ponto_Eletronico_Externo.csproj", "{80785643-4FF0-4D3F-93E3-611DE96FB4D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C6042FFE-8893-4BEA-811B-4A0FF528C0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6042FFE-8893-4BEA-811B-4A0FF528C0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6042FFE-8893-4BEA-811B-4A0FF528C0FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80785643-4FF0-4D3F-93E3-611DE96FB4D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80785643-4FF0-4D3F-93E3-611DE96FB4D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80785643-4FF0-4D3F-93E3-611DE96FB4D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80785643-4FF0-4D3F-93E3-611DE96FB4D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

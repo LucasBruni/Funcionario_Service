@@ -43,7 +43,7 @@ namespace Ponto_Eletronico.Controllers
         // TODO: Verificar se deveria retorna mensagem de erro ou null.
         [HttpGet]
         public Funcionario GetLogin(string user, string senha) {
-            Funcionario funcionario;
+            Funcionario funcionario = new Funcionario();
             IHttpActionResult result;
             
             try
@@ -52,7 +52,18 @@ namespace Ponto_Eletronico.Controllers
                 if (((ResponseMessageResult)result).Response.IsSuccessStatusCode)
                 {
                     funcionario = (Funcionario)((System.Net.Http.ObjectContent)(((ResponseMessageResult)result).Response.Content)).Value;
-                    return funcionario;
+                    // Busca todos os cargos do funcionário.
+                    IEnumerable<Funcionario_Cargo> lista = func_cargoExterna.GetAllCargos(funcionario.Id);
+                    foreach (var item in lista)
+                    {
+                        // Verifica se ele tem o cargo de Administrador. (Apenas Administrador pode logar)
+                        if (item.Cargo.Descricao.ToUpper() == "ADMINISTRADOR")
+                        {
+                            return funcionario;
+                        }
+                    }
+
+                    return null;
                 }
                 else
                 {
@@ -66,7 +77,6 @@ namespace Ponto_Eletronico.Controllers
         }
 
         // TODO: Verificar se deveria retorna mensagem de erro ou null.
-        [HttpPut]
         public bool PutFuncionario(int id, string nome, string cpf, string email, string usuario, string senha) {
             Funcionario funcionario = new Funcionario(id, nome, cpf, email, usuario, senha);
             IHttpActionResult result;
